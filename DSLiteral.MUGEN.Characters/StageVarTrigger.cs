@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System.Runtime.CompilerServices;
 
 namespace DSLiteral.MUGEN.Characters
