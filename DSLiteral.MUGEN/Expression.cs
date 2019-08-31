@@ -6,6 +6,10 @@ namespace DSLiteral.MUGEN
     {
         internal Expression() { }
 
+        public abstract string Export();
+
+        public abstract override string ToString();
+
         public static implicit operator Expression(bool value) => new Int32Literal(value ? 1 : 0);
         public static implicit operator Expression(float value) => new Float32Literal(value);
         public static implicit operator Expression(int value) => new Int32Literal(value);

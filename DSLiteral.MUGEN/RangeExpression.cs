@@ -1,5 +1,7 @@
 ﻿#nullable enable
+
 using System;
+using System.Text;
 
 namespace DSLiteral.MUGEN
 {
@@ -15,6 +17,28 @@ namespace DSLiteral.MUGEN
         public Includes Include { get; }
         public Expression Max { get; }
         public Expression Min { get; }
+
+        public override string Export()
+        {
+            return new StringBuilder()
+                .Append(Include.HasFlag(Includes.Min) ? "[" : "(")
+                .Append(Min.ToString())
+                .Append(",")
+                .Append(Max.ToString())
+                .Append(Include.HasFlag(Includes.Max) ? "]" : ")")
+                .ToString();
+        }
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .Append(Include.HasFlag(Includes.Min) ? "[" : "(")
+                .Append(Min.ToString())
+                .Append(", ")
+                .Append(Max.ToString())
+                .Append(Include.HasFlag(Includes.Max) ? "]" : ")")
+                .ToString();
+        }
 
         [Flags]
         public enum Includes
