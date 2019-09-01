@@ -22,7 +22,7 @@ namespace DSLiteral.MUGEN.Characters
             var value = new StringBuilder();
             if (Redirect is { })
             {
-                value.Append(Redirect.ToString()).Append(",");
+                value.Append(Redirect).Append(",");
             }
             value.Append(Name);
             return value.ToString();

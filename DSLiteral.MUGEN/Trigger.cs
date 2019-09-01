@@ -22,37 +22,22 @@ namespace DSLiteral.MUGEN
 
         public bool Equals(Trigger other) => Export() == other.Export();
 
-        public override string Export()
+        public override string Export(bool deformat)
         {
             var value = new StringBuilder();
             if (Redirect is { })
             {
-                value.Append(Redirect.Export()).Append(",");
+                value.Append(Redirect.Export(deformat)).Append(",");
             }
-            value.Append(Name.ToLower());
+            value.Append(Export(Name, deformat));
             if (Arg is { })
             {
-                value.Append("(").Append(Arg.Export()).Append(")");
+                value.Append("(").Append(Arg.Export(deformat)).Append(")");
             }
             return value.ToString();
         }
 
         public override int GetHashCode() => Export().GetHashCode();
-
-        public override string ToString()
-        {
-            var value = new StringBuilder();
-            if (Redirect is { })
-            {
-                value.Append(Redirect.ToString()).Append(",");
-            }
-            value.Append(Name);
-            if (Arg is { })
-            {
-                value.Append("(").Append(Arg.ToString()).Append(")");
-            }
-            return value.ToString();
-        }
 
         public static implicit operator Trigger(string name) => new Trigger(null, name);
 

@@ -18,24 +18,13 @@ namespace DSLiteral.MUGEN
         public Expression Max { get; }
         public Expression Min { get; }
 
-        public override string Export()
+        public override string Export(bool deformat)
         {
             return new StringBuilder()
                 .Append(Include.HasFlag(Includes.Min) ? "[" : "(")
-                .Append(Min.ToString())
-                .Append(",")
-                .Append(Max.ToString())
-                .Append(Include.HasFlag(Includes.Max) ? "]" : ")")
-                .ToString();
-        }
-
-        public override string ToString()
-        {
-            return new StringBuilder()
-                .Append(Include.HasFlag(Includes.Min) ? "[" : "(")
-                .Append(Min.ToString())
-                .Append(", ")
-                .Append(Max.ToString())
+                .Append(Min.Export(deformat))
+                .Append(Export(", ", deformat))
+                .Append(Max.Export(deformat))
                 .Append(Include.HasFlag(Includes.Max) ? "]" : ")")
                 .ToString();
         }

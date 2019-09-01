@@ -29,11 +29,14 @@ namespace DSLiteral.MUGEN
 
         public int Count => this.items.Length;
 
-        public override string Export() => $"({string.Join($"{Symbol}", this.items.AsEnumerable())})";
+        public override string Export(bool deformat)
+        {
+            var symbol = Export($" {Symbol} ", deformat);
+            var value = string.Join(symbol, from i in this.items select i.Export(deformat));
+            return $"({value})";
+        }
 
         public IEnumerator<Expression> GetEnumerator() => this.items.AsEnumerable().GetEnumerator();
-
-        public override string ToString() => $"({string.Join($" {Symbol} ", this.items.AsEnumerable())})";
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
@@ -47,8 +50,6 @@ namespace DSLiteral.MUGEN
 
         public Expression Value { get; }
 
-        public override string Export() => ToString();
-
-        public override string ToString() => $"{Symbol}({Value})";
+        public override string Export(bool deformat) => $"{Export(Symbol, deformat)}({Value.Export(deformat)})";
     }
 }

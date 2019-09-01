@@ -21,9 +21,7 @@ namespace DSLiteral.MUGEN
 
         public IEnumerator<Expression> GetEnumerator() => this.items.AsEnumerable().GetEnumerator();
 
-        public override string Export() => string.Join(",", this.items.AsEnumerable());
-
-        public override string ToString() => string.Join(", ", this.items.AsEnumerable());
+        public override string Export(bool deformat) => string.Join(Export(", ", deformat), from i in this.items select i.Export(deformat));
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

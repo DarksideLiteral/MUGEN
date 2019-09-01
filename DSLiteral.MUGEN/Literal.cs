@@ -5,8 +5,6 @@ namespace DSLiteral.MUGEN
     public abstract class Literal : Expression
     {
         internal Literal() { }
-
-        public override string Export() => ToString();
     }
 
     public sealed class Float32Literal : Literal
@@ -18,11 +16,13 @@ namespace DSLiteral.MUGEN
 
         public float Value { get; }
 
-        public override string ToString()
+        public override string Export(bool deformat)
         {
             var value = Value.ToString();
             if (value == "0")
                 return "0.";
+            if (!deformat)
+                return value;
             if (value.StartsWith("0."))
                 return value.Substring(2);
             return value.TrimEnd('0');
@@ -38,7 +38,7 @@ namespace DSLiteral.MUGEN
 
         public int Value { get; }
 
-        public override string ToString() => Value.ToString();
+        public override string Export(bool deformat) => Value.ToString();
     }
 
     public sealed class StringLiteral : Literal
@@ -50,7 +50,7 @@ namespace DSLiteral.MUGEN
 
         public string Value { get; }
 
-        public override string ToString() => $"\"{Value}\"";
+        public override string Export(bool deformat) => $"\"{Value}\"";
 
         public static implicit operator StringLiteral(string value) => new StringLiteral(value);
     }
