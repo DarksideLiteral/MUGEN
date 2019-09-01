@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using System.Text;
+
 namespace DSLiteral.MUGEN.Characters
 {
     public sealed class Trigger2
@@ -14,5 +16,16 @@ namespace DSLiteral.MUGEN.Characters
         public Trigger? Redirect { get; }
         public Trigger X => new Trigger(Redirect, $"{Name} X");
         public Trigger Y => new Trigger(Redirect, $"{Name} Y");
+
+        public override string ToString()
+        {
+            var value = new StringBuilder();
+            if (Redirect is { })
+            {
+                value.Append(Redirect.ToString()).Append(",");
+            }
+            value.Append(Name);
+            return value.ToString();
+        }
     }
 }
