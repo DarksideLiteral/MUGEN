@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace DSLiteral.MUGEN.Characters
 {
@@ -23,6 +24,8 @@ namespace DSLiteral.MUGEN.Characters
             {
                 if (name.ToString().StartsWith("trigger", StringComparison.OrdinalIgnoreCase))
                     throw new InvalidOperationException();
+                if (name == "type" && !(value is Trigger))
+                    throw new ArgumentException();
                 if (value is { })
                     this.items[name] = value;
                 else
@@ -34,7 +37,29 @@ namespace DSLiteral.MUGEN.Characters
         public Expression? Persistent { get => Get(); set => Set(value); }
         public List<List<Expression>> Trigger { get; } = new List<List<Expression>>();
         public List<Expression> TriggerAll { get; } = new List<Expression>();
-        public Expression? Type { get => Get(); set => Set(value); }
+        public Trigger? Type { get => (Trigger?)Get(); set => Set(value); }
+
+        public string Export()
+        {
+            var value = new StringBuilder();
+            value.AppendLine("[state ]");
+            foreach (var i in TriggerAll)
+            {
+                value.Append("triggerall=").Append(i.Export()).AppendLine();
+            }
+            for (int i = 0; i < Trigger.Count; ++i)
+            {
+                foreach (var j in Trigger[i])
+                {
+                    value.Append("trigger").Append(i + 1).Append("=").Append(j.Export()).AppendLine();
+                }
+            }
+            foreach (var i in this.items)
+            {
+                value.Append(i.Key.Export()).Append("=").Append(i.Value.Export()).AppendLine();
+            }
+            return value.ToString();
+        }
 
         public override IEnumerable<string> GetDynamicMemberNames()
         {
@@ -45,6 +70,28 @@ namespace DSLiteral.MUGEN.Characters
             {
                 yield return i.Key.ToString();
             }
+        }
+
+        public override string ToString()
+        {
+            var value = new StringBuilder();
+            value.AppendLine("[State ]");
+            foreach (var i in TriggerAll)
+            {
+                value.Append("TriggerAll = ").Append(i.ToString()).AppendLine();
+            }
+            for (int i = 0; i < Trigger.Count; ++i)
+            {
+                foreach (var j in Trigger[i])
+                {
+                    value.Append("Trigger").Append(i + 1).Append(" = ").Append(j.ToString()).AppendLine();
+                }
+            }
+            foreach (var i in this.items)
+            {
+                value.Append(i.Key.ToString()).Append(" = ").Append(i.Value.ToString()).AppendLine();
+            }
+            return value.ToString();
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object? result)
